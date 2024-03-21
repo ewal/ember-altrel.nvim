@@ -1,7 +1,7 @@
 # ember-altrel.nvim
 Neovim plugin for opening related files. Supports project mix of typescript and javascript.
 
-## Configuration
+## Installation
 
 ```lua
 -- lazy.nvim
