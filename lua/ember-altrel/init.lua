@@ -12,12 +12,14 @@ local rotation_extensions = {
   routes = '.ts',
 }
 
+---@param list string[]
 function Set(list)
   local set = {}
   for _, l in ipairs(list) do set[l] = true end
   return set
 end
 
+---@param file string
 function Open_file(file)
   if not File_exists(file) then
     print('File not found: ' .. file)
@@ -26,6 +28,7 @@ function Open_file(file)
   end
 end
 
+---@param file string
 function Fallback_to_js(file)
   if File_exists(file) then
     return file
@@ -36,20 +39,24 @@ function Fallback_to_js(file)
   end
 end
 
+---@param file string
 function File_extension(file)
   local index = string.find(file, '.', 1, true)
   return file:sub(index + 1)
 end
 
+---@param file string
 function File_without_extension(file)
   local index = string.find(file, '.', 1, true)
   return file:sub(1, index - 1)
 end
 
+---@param file string
 function File_exists(file)
   return vim.fn.filereadable(file) == 1
 end
 
+---@param opts table
 function M.setup(opts)
   opts = opts or {}
 
