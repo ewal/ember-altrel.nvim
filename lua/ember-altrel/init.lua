@@ -33,7 +33,7 @@ function Fallback_to_js(file)
   if File_exists(file) then
     return file
   elseif File_extension(file) == 'ts' then
-    return string.match(file, "^(.+)%.") .. '.js'
+    return file:match( "^(.+)%.") .. '.js'
   else
     return file
   end
@@ -41,13 +41,13 @@ end
 
 ---@param file string
 function File_extension(file)
-  local index = string.find(file, '.', 1, true)
+  local index = file:find('.', 1, true)
   return file:sub(index + 1)
 end
 
 ---@param file string
 function File_without_extension(file)
-  local index = string.find(file, '.', 1, true)
+  local index = file:find('.', 1, true)
   return file:sub(1, index - 1)
 end
 
