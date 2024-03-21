@@ -56,8 +56,6 @@ function M.setup(opts)
         if segments[key] then
           local next_path = string.gsub(file_path, key, val)
           next_path = string.gsub(next_path, '.' .. File_extension(file_path), rotation_extensions[key])
-          -- Open_file(next_path)
-          -- print(Fallback_to_js(next_path))
           Open_file(Fallback_to_js(next_path))
           break
         end
