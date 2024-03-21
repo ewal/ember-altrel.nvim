@@ -27,15 +27,23 @@ function Open_file(file)
 end
 
 function Fallback_to_js(file)
-  if not File_exists(file) and File_extension(file) == 'ts' then
-    return file:gsub("%.ts", "") .. '.js'
+  if File_exists(file) then
+    return file
+  elseif File_extension(file) == 'ts' then
+    return string.match(file, "^(.+)%.") .. '.js'
   else
     return file
   end
 end
 
 function File_extension(file)
-  return string.match(file, "^.+%.(.+)$")
+  local index = string.find(file, '.', 1, true)
+  return file:sub(index + 1)
+end
+
+function File_without_extension(file)
+  local index = string.find(file, '.', 1, true)
+  return file:sub(1, index - 1)
 end
 
 function File_exists(file)
@@ -55,7 +63,7 @@ function M.setup(opts)
       for key, val in pairs(rotation_segments) do
         if segments[key] then
           local next_path = string.gsub(file_path, key, val)
-          next_path = string.gsub(next_path, '.' .. File_extension(file_path), rotation_extensions[key])
+          next_path = File_without_extension(next_path) .. rotation_extensions[key]
           Open_file(Fallback_to_js(next_path))
           break
         end
