@@ -33,7 +33,7 @@ function Fallback_to_js(file)
   if File_exists(file) then
     return file
   elseif File_extension(file) == 'ts' then
-    return file:match( "^(.+)%.") .. '.js'
+    return File_without_extension(file) .. '.js'
   else
     return file
   end
