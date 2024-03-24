@@ -57,7 +57,7 @@ local function fallback_to_js(file)
   end
 end
 
-local function rotate_next()
+function M.rotate_next()
   local file_path = vim.fn.expand('%')
   local segments = Set(vim.split(file_path, '/'))
 
@@ -78,8 +78,6 @@ end
 ---@param opts table
 function M.setup(opts)
   opts = opts or {}
-
-  vim.api.nvim_create_user_command('EmberRelNext', rotate_next, {})
 end
 
 return M
