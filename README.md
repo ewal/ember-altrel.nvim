@@ -7,7 +7,8 @@ Neovim plugin for opening related files. Supports project mix of typescript and 
 -- lazy.nvim
 {
   'ewal/ember-altrel.nvim',
-  opts = { }
+  opts = { },
+  -- lazy = false, -- make command(s) available at startup
 }
 ```
 
