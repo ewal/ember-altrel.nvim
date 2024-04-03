@@ -13,6 +13,7 @@ local rotation_extensions = {
 }
 
 ---@param list string[]
+---@return table<string, true>
 local function Set(list)
   local set = {}
   for _, l in ipairs(list) do set[l] = true end
