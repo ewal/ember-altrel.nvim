@@ -67,10 +67,8 @@ function M.rotate_next()
     print('No file buffer open')
   else
     for key, val in pairs(rotation_segments) do
-      print("key " .. val)
       if segments[key] then
         if key == 'components' then
-          print("key " .. key)
           local current_file = string.gsub(file_path, key, val)
           if file_extension(current_file) == 'hbs' then
             open_file(fallback_to_js(file_without_extension(current_file) .. '.ts'))
