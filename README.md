@@ -17,3 +17,8 @@ Rotate between related files
 ```
 :EmberRelNext
 ```
+
+## Changelog
+
+### 2024-05-28
+* Added support for rotating between component class and template
