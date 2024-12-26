@@ -20,5 +20,7 @@ Rotate between related files
 
 ## Changelog
 
+### 2024-12-26
+* Added a new command, `:EmberRelPrev` to go to rotate files in the opposite direction
 ### 2024-05-28
 * Added support for rotating between component class and template
