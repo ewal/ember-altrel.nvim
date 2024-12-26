@@ -16,6 +16,7 @@ Neovim plugin for opening related files. Supports project mix of typescript and 
 Rotate between related files
 ```
 :EmberRelNext
+:EmberRelPrev
 ```
 
 ## Changelog
