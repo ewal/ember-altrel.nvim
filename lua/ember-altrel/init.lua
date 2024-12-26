@@ -1,3 +1,5 @@
+#!/usr/bin/env lua
+
 local M = {}
 
 local rotation_segments = {
@@ -82,24 +84,25 @@ local function rotate(dir)
 	local rot = dir == "backward" and reverse_table(rotation_segments) or rotation_segments
 
 	if file_path == "" then
-		print("No file buffer open")
-	else
-		for key, val in pairs(rot) do
-			if segments[key] then
-				if key == "components" then
-					local current_file = string.gsub(file_path, key, val)
-					if file_extension(current_file) == "hbs" then
-						open_file(fallback_to_js(file_without_extension(current_file) .. ".ts"))
-					else
-						open_file(file_without_extension(current_file) .. ".hbs")
-					end
-					break
+		return print("No file buffer open")
+	end
+
+	for key, val in pairs(rot) do
+		if segments[key] then
+			if key == "components" then
+				local current_file = string.gsub(file_path, key, val)
+
+				if file_extension(current_file) == "hbs" then
+					open_file(fallback_to_js(file_without_extension(current_file) .. ".ts"))
 				else
-					local next_path = string.gsub(file_path, key, val)
-					next_path = file_without_extension(next_path) .. ext[key]
-					open_file(fallback_to_js(next_path))
-					break
+					open_file(file_without_extension(current_file) .. ".hbs")
 				end
+				break
+			else
+				local next_path = string.gsub(file_path, key, val)
+				next_path = file_without_extension(next_path) .. ext[key]
+				open_file(fallback_to_js(next_path))
+				break
 			end
 		end
 	end
