@@ -66,19 +66,20 @@ local function fallback_to_js(file)
 	end
 end
 
+local function reverse_table(t)
+	local reversed = {}
+	for k, v in pairs(t) do
+		reversed[v] = k
+	end
+	return reversed
+end
+
 local function rotate(dir)
 	local file_path = vim.fn.expand("%")
 	local segments = Set(vim.split(file_path, "/"))
 
 	local ext = dir == "backward" and swapped_rotation_extensions or rotation_extensions
-	local rot = rotation_segments
-
-	if dir == "backward" then
-		rot = {}
-		for key, val in pairs(rotation_segments) do
-			rot[val] = key
-		end
-	end
+	local rot = dir == "backward" and reverse_table(rotation_segments) or rotation_segments
 
 	if file_path == "" then
 		print("No file buffer open")
