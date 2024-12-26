@@ -68,12 +68,22 @@ local function fallback_to_js(file)
 	end
 end
 
+---@param t table
 local function reverse_table(t)
 	local reversed = {}
 	for k, v in pairs(t) do
 		reversed[v] = k
 	end
 	return reversed
+end
+
+---@param current_file string
+local function rotate_component(current_file)
+	if file_extension(current_file) == "hbs" then
+		open_file(fallback_to_js(file_without_extension(current_file) .. ".ts"))
+	else
+		open_file(file_without_extension(current_file) .. ".hbs")
+	end
 end
 
 local function rotate(dir)
@@ -91,12 +101,7 @@ local function rotate(dir)
 		if segments[key] then
 			if key == "components" then
 				local current_file = string.gsub(file_path, key, val)
-
-				if file_extension(current_file) == "hbs" then
-					open_file(fallback_to_js(file_without_extension(current_file) .. ".ts"))
-				else
-					open_file(file_without_extension(current_file) .. ".hbs")
-				end
+				rotate_component(current_file)
 				break
 			else
 				local next_path = string.gsub(file_path, key, val)
