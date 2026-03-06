@@ -68,6 +68,17 @@ local function fallback_to_js(file)
 	end
 end
 
+---@param file string
+local function fallback_to_gts(file)
+	if file_exists(file) then
+		return file
+	elseif file_extension(file) == "hbs" then
+		return file_without_extension(file) .. ".gts"
+	else
+		return file
+	end
+end
+
 ---@param t table
 local function reverse_table(t)
 	local reversed = {}
@@ -79,38 +90,62 @@ end
 
 ---@param current_file string
 local function rotate_component(current_file)
-	if file_extension(current_file) == "hbs" then
+	local ext = file_extension(current_file)
+	if ext == "hbs" or ext == "gts" then
 		open_file(fallback_to_js(file_without_extension(current_file) .. ".ts"))
 	else
-		open_file(file_without_extension(current_file) .. ".hbs")
+		open_file(fallback_to_gts(file_without_extension(current_file) .. ".hbs"))
 	end
 end
 
 local function rotate(dir)
 	local file_path = vim.fn.expand("%")
-	local segments = Set(vim.split(file_path, "/"))
-
-	local ext = dir == "backward" and swapped_rotation_extensions or rotation_extensions
-	local rot = dir == "backward" and reverse_table(rotation_segments) or rotation_segments
 
 	if file_path == "" then
 		return print("No file buffer open")
 	end
 
-	for key, val in pairs(rot) do
-		if segments[key] then
-			if key == "components" then
-				local current_file = string.gsub(file_path, key, val)
-				rotate_component(current_file)
-				break
-			else
-				local next_path = string.gsub(file_path, key, val)
-				next_path = file_without_extension(next_path) .. ext[key]
-				open_file(fallback_to_js(next_path))
+	local ext = dir == "backward" and swapped_rotation_extensions or rotation_extensions
+	local rot = dir == "backward" and reverse_table(rotation_segments) or rotation_segments
+	local current_path = file_path
+
+	for _ = 1, 3 do
+		local segments = Set(vim.split(current_path, "/"))
+		local next_path = nil
+		local is_component = false
+
+		for key, val in pairs(rot) do
+			if segments[key] then
+				if key == "components" then
+					is_component = true
+					next_path = current_path
+				else
+					next_path = string.gsub(current_path, key, val)
+					next_path = file_without_extension(next_path) .. ext[key]
+					next_path = fallback_to_gts(fallback_to_js(next_path))
+				end
 				break
 			end
 		end
+
+		if next_path == nil then
+			break
+		end
+
+		if is_component then
+			rotate_component(next_path)
+			return
+		end
+
+		if file_exists(next_path) then
+			vim.cmd.edit(next_path)
+			return
+		end
+
+		current_path = next_path
 	end
+
+	print("No related file found")
 end
 
 function M.rotate_next()

@@ -20,7 +20,9 @@ Rotate between related files
 ```
 
 ## Changelog
-
+### 2026-03-06
+* Added support for rotating between gts templates and routes
+* Improved rotation logic by trying to find the next match when no match is found
 ### 2024-12-26
 * Added a new command, `:EmberRelPrev` to go to rotate files in the opposite direction
 ### 2024-05-28
